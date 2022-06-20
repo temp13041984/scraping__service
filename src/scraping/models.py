@@ -9,6 +9,7 @@ class City(models.Model):
                             verbose_name='Название населенного пункта',
                             unique=True)
     slug = models.CharField(max_length=50, blank=True, unique=True)
+
     class Meta:
         verbose_name='Название населенного пункта'
         verbose_name_plural='Название населенных пунктов'
@@ -54,11 +55,16 @@ class Vacancy(models.Model):
     timestamp = models.DateField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Вакансия'
-        verbose_name_plural = 'Вакансия'
+        verbose_name = 'Язык программирования'
+        verbose_name_plural = 'Языки программирования'
 
     def __str__(self):
-        return self.title
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = from_cyrillic_to_eng(str(self.name))
+        super().save(*args, **kwargs)
 
 
 
