@@ -8,8 +8,8 @@ from .models import Vacancy
 def home_view(request):
     # print(request.GET)
     form = FindForm()
-    city = request.POST.get('city')
-    language = request.POST.get('language')
+    city = request.GET.get('city')
+    language = request.GET.get('language')
     qs = []
     if city or language:
         _filter = {}
