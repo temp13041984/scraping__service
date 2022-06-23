@@ -20,8 +20,8 @@ User = get_user_model()
 
 
 parsers = (
-    (work, 'https://rabota.by/search/vacancy?text=Python&from=suggest_post&fromSearchLine=true&area=1002'),
-    (hh, 'https://hh.ru/search/vacancy?text=Python&from=suggest_post&fromSearchLine=true&area=1&customDomain=1'),
+    (work, 'work'),
+    (hh, 'hh'),
 
 )
 
@@ -43,20 +43,23 @@ def get_urls(_settings):
     return urls
 
 
-q = get_settings()
-u = get_urls(q)
+settings = get_settings()
+url_list= get_urls(settings)
 
-city = City.objects.filter(slug='minsk').first()
-language = Language.objects.filter(slug='python').first()
+#city = City.objects.filter(slug='minsk').first()
+#language = Language.objects.filter(slug='python').first()
 
 jobs, errors = [], []
-for func, url in parsers:
-    j, e = func(url)
-    jobs += j
-    errors += e
+for data in url_list:
+
+    for func, key in parsers:
+        url = data['url_data'][key]
+        j, e = func(url, city=data['city'], language=data['language'])
+        jobs += j
+        errors += e
 
 for job in jobs:
-    v = Vacancy(**job, city=city, language=language)
+    v = Vacancy(**job)
     try:
         v.save()
     except DatabaseError:
