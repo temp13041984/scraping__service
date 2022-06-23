@@ -48,7 +48,7 @@ def work(url, city=None, language=None):
 def hh(url, city=None, language=None):
     jobs = []
     errors = []
-     domain = 'https://hh.ru/'
+    domain = 'https://hh.ru/'
     if url:
         resp = requests.get(url, headers=headers[randint(0, 2)])
         if resp.status_code == 200:
