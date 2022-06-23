@@ -1,3 +1,4 @@
+import jsonfield
 import self as self
 from django.db import models
 
@@ -61,3 +62,7 @@ class Vacancy(models.Model):
     def __str__(self):
         return self.title
 
+
+class Error(models.Model):
+    timestamp = models.DateField(auto_now_add=True)
+    data = jsonfield.JSONField()
