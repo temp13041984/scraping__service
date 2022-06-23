@@ -9,7 +9,7 @@ def home_view(request):
     # print(request.GET)
     form = FindForm()
     city = request.GET.get('city')
-    language = request.GET.get('language')
+    language = request.POST.get('language')
     qs = []
     if city or language:
         _filter = {}
