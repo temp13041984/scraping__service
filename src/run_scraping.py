@@ -1,5 +1,7 @@
 import codecs
 import os, sys
+from django.db import DatabaseError
+
 
 proj = os.path.dirname(os.path.abspath('manage.py'))
 sys.path.append(proj)
@@ -18,16 +20,26 @@ parsers = (
 
 )
 
-city = City.objects.filter(slug='minsk')
+city = City.objects.filter(slug='minsk').first()
+language = Language.objects.filter(slug='python').first()
+
 jobs, errors = [], []
 for func, url in parsers:
     j, e = func(url)
     jobs += j
     errors += e
 
-h = codecs.open('work.txt', 'w', 'utf-8')
-h.write(str(jobs))
-h.close()
+for job in jobs:
+    v = Vacancy(**job, city=city, language=language)
+    try:
+        v.save()
+    except DatabaseError:
+        pass
+
+
+#h = codecs.open('work.txt', 'w', 'utf-8')
+#h.write(str(jobs))
+#h.close()
 
 
 
